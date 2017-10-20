@@ -1,9 +1,14 @@
-package com.services.events;
+
+/**
+ * Location model consists of all the objects associated with the Location - Coordinates
+ * @author Chirg Basavaraj
+ *
+ */
+package com.services.models;
 
 public class Location {
 	private double x_cordinate; 
 	private double y_cordinate;
-	private Event ev = new Event();
 	
 	public double getX_cordinate() {
 		return x_cordinate;
@@ -18,12 +23,5 @@ public class Location {
 		this.y_cordinate = y_cordinate;
 	}
 	
-	public void setEvent(Event event) {
-		this.ev = event;
-	}
-	
-	public Event getEvent() {
-		return ev;
-	}
 	
 }
