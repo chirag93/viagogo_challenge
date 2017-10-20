@@ -1,32 +1,31 @@
 package com.services.events;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.stream.IntStream;
 
+import com.services.eventfinder.utils.ConfigFileReaderUtil;
 import com.services.models.Event;
 import com.services.models.Location;
 
 
 
 public class WorldDataGenerator {
-	
-	public final static int MAX_EVENTS = 10;
-	public final static int MIN_EVENTS =0;
-	public final static int MAX_NO_TICKETS =50;
-	public final static int MIN_NO_TICKETS =0;
-	public final static double MAX_TICKET_PRICE = 1000;
-	public final static double MIN_TICKET_PRICE = 50;
-	public final static double MIN_X_RANGE = -10;
-	public final static double MAX_X_RANGE = 10;
-	public final static double MAX_Y_RANGE = 10;
-	public final static double MIN_Y_RANGE = -10;
-	public final static int MAX_LOCATIONS = 441;
+	static ConfigFileReaderUtil config = new ConfigFileReaderUtil();
+	public final static int MAX_EVENTS = Integer.parseInt(ConfigFileReaderUtil.propertyFileReader().getProperty("MAX_EVENTS"));
+	public final static int MIN_EVENTS = Integer.parseInt(ConfigFileReaderUtil.propertyFileReader().getProperty("MIN_EVENTS"));
+	public final static int MAX_NO_TICKETS =Integer.parseInt(ConfigFileReaderUtil.propertyFileReader().getProperty("MAX_NO_TICKETS"));
+	public final static int MIN_NO_TICKETS =Integer.parseInt(ConfigFileReaderUtil.propertyFileReader().getProperty("MIN_NO_TICKETS"));
+	public final static double MAX_TICKET_PRICE = Integer.parseInt(ConfigFileReaderUtil.propertyFileReader().getProperty("MAX_TICKET_PRICE"));
+	public final static double MIN_TICKET_PRICE = Integer.parseInt(ConfigFileReaderUtil.propertyFileReader().getProperty("MIN_TICKET_PRICE"));
+	public final static double MIN_X_RANGE = Integer.parseInt(ConfigFileReaderUtil.propertyFileReader().getProperty("MIN_X_RANGE"));
+	public final static double MAX_X_RANGE = Integer.parseInt(ConfigFileReaderUtil.propertyFileReader().getProperty("MAX_X_RANGE"));;
+	public final static double MAX_Y_RANGE = Integer.parseInt(ConfigFileReaderUtil.propertyFileReader().getProperty("MAX_Y_RANGE"));;
+	public final static double MIN_Y_RANGE = Integer.parseInt(ConfigFileReaderUtil.propertyFileReader().getProperty("MIN_Y_RANGE"));;
+	public final static int MAX_LOCATIONS = Integer.parseInt(ConfigFileReaderUtil.propertyFileReader().getProperty("MAX_LOCATIONS"));;
 
 	private static int getEventNumber(int minEvents,int maxEvents) {
 		int[] numberRange = IntStream.range(0, MAX_LOCATIONS+1).toArray();
@@ -34,6 +33,7 @@ public class WorldDataGenerator {
 		 return numberRange[randomIndex];
 		
 	}
+	
 	
 	private static List<Double> generateEventTickets(){
 		List<Double> tickets = new ArrayList<Double>();
@@ -54,7 +54,7 @@ public class WorldDataGenerator {
 		return event;
 	}
 	
-	public static Map<Location,Event> generateSeedData() {
+	public static Map<Location,Event> populateLocationPoints() {
 		
 		Map<Location,Event> worldData = new HashMap<>();
 		IntStream.range(0, MAX_LOCATIONS+1).forEach(i->{
@@ -69,7 +69,7 @@ public class WorldDataGenerator {
 	}
 	
 	private static Map<Location,Event> populateDistances(double x,double y){
-		Map<Location,Event> worldData = generateSeedData();
+		Map<Location,Event> worldData = populateLocationPoints();
 		worldData.forEach((location,event)->{
 			double distance = getDistance(x, location.getX_cordinate(), y, location.getY_cordinate());
 			event.setDistance(distance);
@@ -77,21 +77,23 @@ public class WorldDataGenerator {
 		return worldData;
 	}
 	
-	private static void getMinimumDistEvents(double x,double y) {
+
+	
+	public List<Event> getMinimumDistEvents(double x,double y) {
 		Map<Location,Event> worldData = populateDistances(x, y);
-		List<Event> minimDistEvents = new ArrayList<>();
-		
+		List<Event> events = new ArrayList<Event>();
+		List<Event> minimumDistEvent = new ArrayList<Event>();
 		worldData.forEach((location,event)->{
-			System.out.println("Value of the world data events ====="+event.getDistance() + " and event Id =="+event.getEventNumber());
-			minimDistEvents.add(event);
+			events.add(event);
 			
 		});
 		
-		minimDistEvents.sort((e1, e2)->e1.getDistance().compareTo(e2.getDistance()));
-		minimDistEvents.stream().limit(5).forEach(eve->{
-			System.out.println(eve.getDistance()+ " and event Id :  "+eve.getEventNumber() + "  and prices ="+Collections.min(eve.getTickets()));
+		events.sort((e1, e2)->e1.getDistance().compareTo(e2.getDistance()));
+		events.stream().limit(5).forEach(eve->{
+			minimumDistEvent.add(eve);
 		});
-
+		
+		return minimumDistEvent;
 		
 	}
 	
@@ -99,13 +101,6 @@ public class WorldDataGenerator {
 		return Math.abs(x1-x0) + Math.abs(y1-y0);
 	}
 	
-	
-
-	public static void main(String[] args) throws IOException {
-		double x  = 19.5; double y = 3.5;
-		getMinimumDistEvents(x, y);
-		
-	}
 }
 
 

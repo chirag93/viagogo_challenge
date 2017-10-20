@@ -23,5 +23,4 @@ public class Location {
 		this.y_cordinate = y_cordinate;
 	}
 	
-	
 }
