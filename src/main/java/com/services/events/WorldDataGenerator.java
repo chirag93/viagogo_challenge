@@ -47,14 +47,14 @@ public class WorldDataGenerator {
 		return tickets;
 	}
 	
-	private static Event generateEvent() {
+	public  Event generateEvent() {
 		Event event = new Event();
 		event.setEventNumber(getEventNumber(MIN_EVENTS,MAX_EVENTS));
 		event.setTickets(generateEventTickets());
 		return event;
 	}
 	
-	public static Map<Location,Event> populateLocationPoints() {
+	public  Map<Location,Event> populateLocationPoints() {
 		
 		Map<Location,Event> worldData = new HashMap<>();
 		IntStream.range(0, MAX_LOCATIONS+1).forEach(i->{
@@ -68,7 +68,7 @@ public class WorldDataGenerator {
 		return worldData;
 	}
 	
-	private static Map<Location,Event> populateDistances(double x,double y){
+	private  Map<Location,Event> populateDistances(double x,double y){
 		Map<Location,Event> worldData = populateLocationPoints();
 		worldData.forEach((location,event)->{
 			double distance = getDistance(x, location.getX_cordinate(), y, location.getY_cordinate());

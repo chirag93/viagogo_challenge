@@ -20,7 +20,7 @@ public class EventFinder {
 	
 	public static void main(String[] args) throws IOException {
 		Scanner reader = new Scanner(System.in);  // Reading from System.in
-		System.out.println("Enter Coordinates: ");
+		System.out.println("Enter Coordinates (x,y): ");
 		reader.useDelimiter("\\D");
 		double x = reader.nextDouble();
 		double y = reader.nextDouble();

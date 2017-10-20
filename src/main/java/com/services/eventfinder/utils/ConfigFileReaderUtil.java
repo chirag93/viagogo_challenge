@@ -12,14 +12,9 @@ public class ConfigFileReaderUtil {
 			InputStream input = null;
 
 			try {
-
 				input = new FileInputStream("config.properties");
-				
-				// load a properties file
+				// load  properties file
 				prop.load(input);
-
-				
-
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			} finally {
